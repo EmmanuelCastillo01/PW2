@@ -6,10 +6,23 @@ const usuarioschema = new mongoose.Schema({
         type: Number,
         unique: true
       },
-      nombre: {
+      nombre_usuario: {
         type: String,
-        required: [true, "Debe ser el nombre de usuario"]
-    } 
+        required: [true, "Ingresa un nombre de usuario"]
+    },
+    contraseña:{
+      type: String,
+      required: [true, "Debe llenarse el campo de la contraseña"]
+    },
+    correo_electronico:{
+      type: String,
+      required: [true, "Ingrese una direccion de correa electronica"]
+    },
+    nombre_completo: {
+      type: String,
+        required: [true, "Ingrese su nombre"]
+    }
+
 
 });
 

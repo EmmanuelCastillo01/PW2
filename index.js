@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const uri = 'mongodb://useradmin:grupo52PW2_AD2024@xorgx11.com:27017/DATABASE?authSource=admin&readPreference=primary&ssl=false ';
+const uri = 'direccion';
 const express = require('express'); const app = express(); const port = 8080;
 const bodyParser = require('body-parser');
 // support parsing of application/json type post data

@@ -1,31 +1,30 @@
 const mongoose = require("mongoose");
 
-const usuarioschema = new mongoose.Schema({
-
-    id: {
-        type: Number,
-        unique: true
-      },
-      nombre_usuario: {
+const usuarioSchema = new mongoose.Schema({
+    nombre_usuario: {
         type: String,
         required: [true, "Ingresa un nombre de usuario"]
     },
-    contraseña:{
-      type: String,
-      required: [true, "Debe llenarse el campo de la contraseña"]
+    contraseña: {
+        type: String,
+        required: [true, "Debe llenarse el campo de la contraseña"]
     },
-    correo_electronico:{
-      type: String,
-      required: [true, "Ingrese una direccion de correa electronica"]
+    correo_electronico: {
+        type: String,
+        required: [true, "Ingrese una dirección de correo electrónico"]
     },
     nombre_completo: {
-      type: String,
+        type: String,
         required: [true, "Ingrese su nombre"]
+    },
+    tipo_usuario: {
+        type: String,
+        enum: ["usuario", "empleado"], // Solo permite estos dos valores
+        required: true,
+        default: "usuario"
     }
-
-
 });
 
-const usuario = mongoose.model("usuario",usuarioschema);
+const Usuario = mongoose.model("Usuario", usuarioSchema);
 
-module.exports = usuario;
+module.exports = Usuario;

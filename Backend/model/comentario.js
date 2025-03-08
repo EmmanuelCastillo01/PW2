@@ -17,7 +17,8 @@ const comentarioSchema = new mongoose.Schema({
     },
     comentario: {
         type: String,
-        required: [true, "Debe ingresar un comentario"]
+        required: [true, "Debe ingresar un comentario"],
+        maxlength: [500, "El comentario no puede superar los 500 caracteres"]
     },
     calificacion: {
         type: Number,

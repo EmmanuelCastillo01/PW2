@@ -1,4 +1,4 @@
-const Pelicula = require("../models/pelicula");
+const Pelicula = require("../model/pelicula");
 
 // Obtener todas las películas
 exports.getPeliculas = async (req, res) => {

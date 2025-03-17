@@ -12,6 +12,19 @@ exports.getUsuarios = async (req, res) => {
   }
 };
 
+exports.validarUsuario = async (req, res) => {
+  try {
+    const usuarioExistente = await Usuario.findOne({ correo_electronico: req.body.correo_electronico, contraseña: req.body.contraseña });
+    if (!usuarioExistente)  {
+      return res.status(404).json({ success: false, message: `Usuario con correo o contrasena ${req.body.correo_electronico} no encontrado` });
+    }
+    res.status(200).json({ success: true, data: usuarioExistente });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error al obtener el usuario", error });
+  }
+};
+
+
 // @desc    Obtener un usuario por ID
 // @route   GET /api/v1/usuarios/:id
 // @access  Público.
@@ -32,8 +45,15 @@ exports.getUsuario = async (req, res) => {
 // @access  Público
 exports.createUsuario = async (req, res) => {
   try {
+
+    const usuarioExistente = await Usuario.findOne({ correo_electronico: req.body.correo_electronico });
+    if (!usuarioExistente) {
     const usuario = await Usuario.create(req.body);
     res.status(201).json({ success: true, data: usuario, message: 'Usuario creado correctamente' });
+    }
+    else {
+      res.status(400).json({ success: false, message: "Usuario ya existe" });
+    }
   } catch (error) {
     res.status(400).json({ success: false, message: "Error al crear usuario", error });
   }

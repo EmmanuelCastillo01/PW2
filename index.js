@@ -5,6 +5,8 @@ const Usuario = require('./Backend/model/usuario');
 const Pelicula = require('./Backend/model/pelicula');
 const Comentario = require('./Backend/model/comentario');
 const users = require('./Backend/routes/usuario');
+const movies = require('./Backend/routes/pelicula');
+const comments = require('./Backend/routes/comentario');
 
 const app = express();
 const port = 8080;
@@ -46,6 +48,8 @@ conectarDB().then(async () => {
     app.use(bodyParser.urlencoded({ extended: true }));
     
     app.use('/users', users);
+    app.use('/movies', movies);
+    app.use('/comments', comments);
 
     // Iniciar el servidor
     app.listen(port, () => {

@@ -3,7 +3,7 @@ const Comentario = require("../model/comentario");
 // Obtener todos los comentarios
 exports.getComentarios = async (req, res) => {
     try {
-        const comentarios = await Comentario.find({}).populate("usuario", "nombre_usuario").populate("pelicula", "titulo");
+        const comentarios = await Comentario.find({}).populate("usuario_id", "nombre_usuario").populate("pelicula_id", "titulo");
         res.status(200).json({ success: true, count: comentarios.length, data: comentarios });
     } catch (error) {
         res.status(500).json({ success: false, message: "Error al obtener comentarios", error });

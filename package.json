@@ -4,7 +4,7 @@
   "description": "dependencias del proyecto",
   "main": "index.js",
   "scripts": {
-    "start": "npm index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -13,7 +13,17 @@
   "author": "David Emmanuel",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.3",
     "express": "^4.21.2",
     "mongoose": "^8.12.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EmmanuelCastillo01/PW2.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/EmmanuelCastillo01/PW2/issues"
+  },
+  "homepage": "https://github.com/EmmanuelCastillo01/PW2#readme"
 }

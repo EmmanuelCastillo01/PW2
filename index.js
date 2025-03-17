@@ -1,8 +1,18 @@
-/*const mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const express = require('express');
+const bodyParser = require('body-parser');
+const Usuario = require('./Backend/model/usuario'); 
+const Pelicula = require('./Backend/model/pelicula');
+const Comentario = require('./Backend/model/comentario');
+const users = require('./Backend/routes/usuario');
 
+const app = express();
+const port = 8080;
+
+// Conectar a MongoDB
 const conectarDB = async () => {
     try {
-        await mongoose.connect('mongodb://localhost:27017/mi_base_de_datos', {
+        await mongoose.connect('mongodb://localhost:27017/PrograWeb2', {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
@@ -13,55 +23,34 @@ const conectarDB = async () => {
     }
 };
 
-module.exports = conectarDB;
-
-*/
-const mongoose = require('mongoose'); //CODIGO DEL PROFE
-
-const uri = 'direccion';
-const express = require('express'); const app = express(); const port = 8080;
-const bodyParser = require('body-parser');
-// support parsing of application/json type post data
-mongoose.connect(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-  .then(() => {
-    app.use(bodyParser.json());
-    //support parsing of application/x-www-form-urlencoded post data
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.get('/', (req, res) => {
-      res.send('Hello World!')
-    })
-    const users = require('./routers/usuario')
-    app.use('/users', users)
+// Llamar a la función para conectar a la base de datos
+conectarDB().then(async () => {
     
+    /*const usuarioExistente = await Usuario.findOne({ correo_electronico: 'admin@example.com' });
+    if (!usuarioExistente) {
+        const usuarioAdmin = new Usuario({
+            nombre_usuario: 'Admin',
+            correo_electronico: 'admin@example.com',
+            contraseña: 'admin123',
+            nombre_completo: 'Administrador',
+            tipo_usuario: 'empleado'
+        });
+        await usuarioAdmin.save();
+        console.log('Usuario admin creado');
+    } else {
+        console.log('Usuario admin ya existe');
+    }*/
+
+    // Middleware para parsear JSON y URL-encoded
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
+    
+    app.use('/users', users);
+
+    // Iniciar el servidor
     app.listen(port, () => {
-      console.log(`Example app listening on port ${port}`)
-    })
-      })
-  .catch(error => {
+        console.log(`Servidor corriendo en http://localhost:${port}`);
+    });
+}).catch(error => {
     console.error('Connection fail', error);
-  });
-
-/*const express = require('express');
-const app = express();
-
-// Middleware para parsear JSON
-app.use(express.json());
-
-// Importar rutas desde la carpeta "views"
-const usuarioRoutes = require('./routes/usuario');
-const peliculaRoutes = require('./routes/pelicula');
-const comentarioRoutes = require('./routes/comentario');
-
-// Usar rutas
-app.use('/api/v1', usuarioRoutes);
-app.use('/api/v1', peliculaRoutes);
-app.use('/api/v1', comentarioRoutes);
-
-// Puerto y escucha
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});*/
+});

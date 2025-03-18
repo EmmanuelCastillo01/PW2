@@ -1,20 +1,58 @@
 import React, { FC, useState, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom'; // <-- Importar useNavigate
 import RegisterModal from './RegisterModal';
+import { useMutation } from '@tanstack/react-query';
+import { ValidateUser } from '../services/userServices';
+import { validarUsuario } from '../actions/Actions';
 
 interface LoginProps {
   // Define props si las necesitas
 }
 
+//const {  mutate:crearUsuario, isPending, isError, error, data } = useCreateUser();
+
 const Login: FC<LoginProps> = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [correo_electronico, setEmail] = useState<string>('');
+  const [contraseña, setPassword] = useState<string>('');
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
+
+  const {  mutate:LoginUsuario, isPending, isError, error, data } = validarUsuario();
+
+  const navigate = useNavigate();
+    // Lógica de autenticación
+   // console.log(email, password);
+
+
+  // Manejo del envío del formulario
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // Lógica de autenticación
-    console.log(email, password);
+
+    const usuario: LoginP ={
+        contraseña, 
+        correo_electronico, 
+      };
+
+    LoginUsuario(usuario, {
+      onError: (error) => {
+          
+      },
+      onSuccess: (data) => {
+        // Manejo de éxito local
+        if(data.success){
+
+        navigate('/Main');
+        }
+        else{
+            console.log("Usuario no encontrado");
+        }
+      },
+    });
+
+   
   };
+
+
 
   const openRegisterModal = () => setIsRegisterOpen(true);
   const closeRegisterModal = () => setIsRegisterOpen(false);
@@ -40,7 +78,7 @@ const Login: FC<LoginProps> = () => {
               type="email"
               className="w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               placeholder="Correo electrónico"
-              value={email}
+              value={correo_electronico}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -53,7 +91,7 @@ const Login: FC<LoginProps> = () => {
               type="password"
               className="w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               placeholder="Contraseña"
-              value={password}
+              value={contraseña}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
@@ -62,7 +100,7 @@ const Login: FC<LoginProps> = () => {
           <button
             type="submit"
             className="bg-gray-800 text-white w-full py-2 rounded hover:bg-gray-900"
-          >
+  >
             Iniciar sesión
           </button>
         </form>

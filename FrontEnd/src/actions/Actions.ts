@@ -1,5 +1,5 @@
 import { useMutation,UseMutationResult  } from '@tanstack/react-query';
-import { createUser } from '../services/userServices';
+import { createUser, ValidateUser } from '../services/userServices';
 
 export function useCreateUser() {
  
@@ -15,3 +15,18 @@ export function useCreateUser() {
     
   });
 }
+
+ //validar usuario
+ export function validarUsuario() { 
+  
+  return useMutation<any, Error, LoginP>({
+  mutationFn: ValidateUser,
+  onSuccess: (data) => {
+    // Handle success
+  },
+  onError: (error) => {
+    // Handle error
+    console.error(error);
+  },
+});
+ }

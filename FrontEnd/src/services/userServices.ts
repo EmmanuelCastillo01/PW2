@@ -16,7 +16,17 @@
     return response.json();
   }
   
-  // Función para obtener usuarios
+  // Función para Validar Usuario
+  export async function ValidateUser(user: LoginP): Promise<any> {
+    const response = await fetch('http://localhost:8080/users/usuario/validar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user),
+    });
+    return response.json();
+  }
+
+  /*
   export async function fetchUsers(): Promise<any[]> {
     const response = await fetch('http://localhost:3000/api/users');
     if (!response.ok) {
@@ -24,6 +34,6 @@
     }
     return response.json();
   }
-  
+  */
   // Puedes exportar más funciones: updateUser, deleteUser, etc.
   

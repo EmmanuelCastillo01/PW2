@@ -10,3 +10,12 @@ interface Usuario {
     success: boolean;
     data: any;
   }
+
+
+  interface LoginP {
+
+    correo_electronico: string;
+    contraseña: string;
+
+  
+    }

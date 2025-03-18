@@ -1,0 +1,29 @@
+// src/services/userService.ts
+
+
+  
+  // Función para crear usuario
+  export async function createUser(user: Usuario): Promise<any> {
+    const response = await fetch('http://localhost:8080/users/usuario/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user),
+    });
+    
+   
+ 
+  
+    return response.json();
+  }
+  
+  // Función para obtener usuarios
+  export async function fetchUsers(): Promise<any[]> {
+    const response = await fetch('http://localhost:3000/api/users');
+    if (!response.ok) {
+      throw new Error('Error al obtener los usuarios');
+    }
+    return response.json();
+  }
+  
+  // Puedes exportar más funciones: updateUser, deleteUser, etc.
+  

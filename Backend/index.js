@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
-const Usuario = require('./Backend/model/usuario'); 
-const Pelicula = require('./Backend/model/pelicula');
-const Comentario = require('./Backend/model/comentario');
-const users = require('./Backend/routes/usuario');
-const movies = require('./Backend/routes/pelicula');
-const comments = require('./Backend/routes/comentario');
+const Usuario = require('./model/usuario'); 
+const Pelicula = require('./model/pelicula');
+const Comentario = require('./model/comentario');
+const users = require('./routes/usuario');
+const movies = require('./routes/pelicula');
+const comments = require('./routes/comentario');
+const cors = require('cors');
 
 const app = express();
 const port = 8080;
@@ -44,6 +45,7 @@ conectarDB().then(async () => {
     }*/
 
     // Middleware para parsear JSON y URL-encoded
+    app.use(cors());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
     

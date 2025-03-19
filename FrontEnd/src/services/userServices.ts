@@ -1,7 +1,4 @@
-// src/services/userService.ts
 
-
-  
   // Función para crear usuario
   export async function createUser(user: Usuario): Promise<any> {
     const response = await fetch('http://localhost:8080/users/usuario/', {
@@ -10,9 +7,6 @@
       body: JSON.stringify(user),
     });
     
-   
- 
-  
     return response.json();
   }
   

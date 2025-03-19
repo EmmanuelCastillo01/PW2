@@ -4,10 +4,13 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Main from './components/Main';
 import Login from './components/Login';
 
+
+
 function App() {
   return (
     <Router>
     <Routes>
+    
       {/* Ruta principal con el componente de Login */}
       <Route path="/" element={<Login />} />
 

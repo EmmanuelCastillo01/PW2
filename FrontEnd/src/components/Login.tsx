@@ -20,7 +20,7 @@ const Login: FC<LoginProps> = () => {
   const { setUser } = useUserStore();
 
 
-  const {  mutate:LoginUsuario, isPending, isError, error, data } = validarUsuario();
+  const { mutate: LoginUsuario, isPending, isError, error, data } = validarUsuario();
 
   const navigate = useNavigate();
 
@@ -28,46 +28,37 @@ const Login: FC<LoginProps> = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    const usuario: LoginP ={
-        contraseña, 
-        correo_electronico, 
-      };
+    const usuario: LoginP = {
+      contraseña,
+      correo_electronico,
+    };
 
     LoginUsuario(usuario, {
       onError: (error) => {
-          
+
       },
       onSuccess: (response) => {
         // Manejo de éxito local
-        if(response.success){
+        if (response.success) {
 
           const usuario: Usuario =
           {
-           correo_electronico: response.data.correo_electronico as string,
-           nombre_completo: response.data.nombre_completo as string,
-           nombre_usuario: response.data.nombre_usuario as string,
-           tipo_usuario: response.data.tipo_usuario as string,
-           id: response.data._id as string,
-           contraseña: response.data.contraseña as string
- 
+            correo_electronico: response.data.correo_electronico as string,
+            nombre_completo: response.data.nombre_completo as string,
+            nombre_usuario: response.data.nombre_usuario as string,
+            tipo_usuario: response.data.tipo_usuario as string,
+            id: response.data._id as string,
+            contraseña: response.data.contraseña as string
+
           };
- 
           setUser(usuario);
-
-        navigate('/Main');
-       
-       
-
+          navigate('/Main');
         }
-        else{
+        else {
           toast.error('Usuario no encontrado');
-
-            
         }
       },
     });
-
-   
   };
 
   const openRegisterModal = () => setIsRegisterOpen(true);
@@ -116,15 +107,15 @@ const Login: FC<LoginProps> = () => {
           <button
             type="submit"
             className="bg-gray-800 text-white w-full py-2 rounded hover:bg-gray-900"
-  >
+          >
             Iniciar sesión
           </button>
         </form>
 
         <p className="mt-4">
           ¿Todavía no tienes una cuenta?{' '}
-          <button 
-            onClick={openRegisterModal} 
+          <button
+            onClick={openRegisterModal}
             className="font-bold underline text-gray-800">
             Regístrate
           </button>

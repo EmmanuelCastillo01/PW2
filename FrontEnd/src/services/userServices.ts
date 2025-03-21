@@ -20,6 +20,15 @@
     return response.json();
   }
 
+  // Función para Validar Usuario
+  export async function ObtenerPeliculas(): Promise<any> {
+    const response = await fetch('http://localhost:8080/movies/pelicula', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    return response.json();
+  }
+
   /*
   export async function fetchUsers(): Promise<any[]> {
     const response = await fetch('http://localhost:3000/api/users');

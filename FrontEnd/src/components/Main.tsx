@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUserStore } from '../globaStorage';
 import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { useObtenerPeliculas } from '../actions/Actions';
+import PeliculaCard from './PeliculaCard';
 
 export default function Main() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
-  const { user,logout } = useUserStore();
+  const { user, logout } = useUserStore();
+
+  //implementamos la funcion para traer las peliculas del API
+  const { mutate: cargarPeliculas, isPending, isError, error, data: listadePeliculas } = useObtenerPeliculas();
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -12,7 +18,7 @@ export default function Main() {
   const navigate = useNavigate();
   const handleLogout = () => {
     // 1) Llama a la acción de cerrar sesión en la store (o tu lógica manual)
-    logout(); 
+    logout();
     // 2) Redirige a la ruta donde esté tu Login, por ejemplo '/'
     navigate('/');
   };
@@ -21,7 +27,15 @@ export default function Main() {
     navigate('/');
     return null;
   }
-  
+
+  //Con esto llamamos a la funcion para obtener las peliculas al cargar el componente
+  useEffect(() => {
+    cargarPeliculas();
+    
+  }, []);
+
+
+
   return (
     <div className="flex flex-col min-h-screen text-gray-800">
       {/* Barra Superior */}
@@ -46,7 +60,9 @@ export default function Main() {
           <input
             type="text"
             placeholder="Buscar película..."
-            className="p-2 rounded-l border border-gray-700 focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="p-2 rounded-l border border-gray-700 
+             focus:outline-none focus:ring-1 focus:ring-gray-700
+             bg-white text-black"
           />
           <button className="bg-gray-700 text-white px-4 py-2 rounded-r hover:bg-gray-600">
             Buscar
@@ -62,10 +78,11 @@ export default function Main() {
             <div className="h-full flex flex-col p-4">
               <h2 className="text-3xl font-bold mb-6">Menú</h2>
               <nav className="flex flex-col gap-4">
-              <button className="text-left hover:underline">{user?.nombre_usuario}</button>
                 <button className="text-left hover:underline">Inicio</button>
                 <button className="text-left hover:underline">Categorías</button>
                 <button className="text-left hover:underline">Mi Lista</button>
+                {user?.tipo_usuario === 'empleado' && (
+                  <button className="text-left hover:underline">Agregar Pelicula</button>)}
                 <button className="text-left hover:underline" onClick={handleLogout}>Cerrar Sesion</button>
               </nav>
             </div>
@@ -79,15 +96,14 @@ export default function Main() {
             <section>
               <h2 className="text-2xl font-semibold mb-2">Tendencias</h2>
               <div className="grid grid-cols-3 gap-4">
-                <div className="bg-black text-white h-40 flex items-center justify-center">
-                  Película 1
-                </div>
-                <div className="bg-black text-white h-40 flex items-center justify-center">
-                  Película 2
-                </div>
-                <div className="bg-black text-white h-40 flex items-center justify-center">
-                  Película 3
-                </div>
+                {listadePeliculas && listadePeliculas?.data && listadePeliculas.data.length > 0 ? (
+                  listadePeliculas.data.map((pelicula : Pelicula) => (
+                   
+                    <PeliculaCard key={pelicula._id} data={pelicula}  heightClass={sidebarOpen ? 'h-44' : 'h-56'}  />
+                  ))
+                ) : (
+                  <p>No hay películas para mostrar</p>
+                )}
               </div>
             </section>
 

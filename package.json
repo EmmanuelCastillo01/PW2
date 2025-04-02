@@ -4,8 +4,14 @@
   "description": "dependencias del proyecto",
   "main": "index.js",
   "scripts": {
-    "start": "npm index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node Backend/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node Backend/index.js",
+    "client": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "keywords": [
     "equipo2"
@@ -13,7 +19,40 @@
   "author": "David Emmanuel",
   "license": "ISC",
   "dependencies": {
+    "@tanstack/react-query": "^5.68.0",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
     "express": "^4.21.2",
-    "mongoose": "^8.12.1"
+    "mongoose": "^8.12.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.3.0",
+    "sonner": "^2.0.1",
+    "zustand": "^5.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EmmanuelCastillo01/PW2.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/EmmanuelCastillo01/PW2/issues"
+  },
+  "homepage": "https://github.com/EmmanuelCastillo01/PW2#readme",
+  "devDependencies": {
+    "@types/react": "^19.0.11",
+    "@types/react-dom": "^19.0.4",
+    "@typescript-eslint/eslint-plugin": "^8.26.1",
+    "@typescript-eslint/parser": "^8.26.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.22.0",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.2"
   }
 }

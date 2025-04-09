@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Main from './components/Main';
 import Login from './components/Login';
-
+import MiLista from './components/MiLista';
 
 
 function App() {
@@ -16,6 +16,9 @@ function App() {
 
       {/* Ruta para la vista nueva, a donde ir después de iniciar sesión */}
       <Route path="/Main" element={<Main />} />
+      
+      <Route path="/perfil" element={<MiLista />} />
+
     </Routes>
   </Router>
   );

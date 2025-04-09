@@ -17,9 +17,9 @@ export default function Main() {
   };
   const navigate = useNavigate();
   const handleLogout = () => {
-    // 1) Llama a la acción de cerrar sesión en la store (o tu lógica manual)
+    
     logout();
-    // 2) Redirige a la ruta donde esté tu Login, por ejemplo '/'
+    
     navigate('/');
   };
 
@@ -40,9 +40,9 @@ export default function Main() {
     <div className="flex flex-col min-h-screen text-gray-800">
       {/* Barra Superior */}
       <header className="bg-black text-white p-4 flex items-center justify-between">
-        {/* Zona Izquierda: Botón Hamburguesa + Título */}
+        {/* Zona Izquierda: */}
         <div className="flex items-center">
-          {/* Botón hamburguesa */}
+          {/* Botón */}
           <button onClick={toggleSidebar} className="focus:outline-none mr-4">
             <span className="block w-6 h-0.5 bg-white mb-1"></span>
             <span className="block w-6 h-0.5 bg-white mb-1"></span>
@@ -70,7 +70,7 @@ export default function Main() {
         </div>
       </header>
 
-      {/* Cuerpo principal: Sidebar (si está abierto) + Secciones */}
+      {/*Cuerpo principal: Sidebar*/}
       <div className="flex flex-1">
         {/* Menú Lateral */}
         {sidebarOpen && (
@@ -78,9 +78,19 @@ export default function Main() {
             <div className="h-full flex flex-col p-4">
               <h2 className="text-3xl font-bold mb-6">Menú</h2>
               <nav className="flex flex-col gap-4">
-                <button className="text-left hover:underline">Inicio</button>
+                 {/*Cambio principal: links del menú funcionales*/}
+                <button
+                  className="text-left hover:underline"
+                  onClick={()=> navigate('/Main')}
+                >
+                Inicio
+                </button>
                 <button className="text-left hover:underline">Categorías</button>
-                <button className="text-left hover:underline">Mi Lista</button>
+                <button
+                  className="text-left hover:underline"
+                  onClick={()=> navigate('/perfil')}
+                >Mi Lista
+                </button>
                 {user?.tipo_usuario === 'empleado' && (
                   <button className="text-left hover:underline">Agregar Pelicula</button>)}
                 <button className="text-left hover:underline" onClick={handleLogout}>Cerrar Sesion</button>

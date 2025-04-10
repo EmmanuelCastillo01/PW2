@@ -3,7 +3,8 @@ Repositorio para programacion web 2
 
 Nombres de los integrantes 
 Tania Berenice Rodriguez Guerrero 2007809
-
+David Emmanuel Bustamante Castillo 1928366
+Jose Alonso Lopez Ortiz 1804224
 
 Descripcion de la aplicacion
 ReviewXpert es una aplicación web desarrollada con una arquitectura de frontend y backend separadas. Su objetivo principal es permitir a los usuarios registrarse, iniciar sesión, explorar películas, ver detalles individuales y dejar valoraciones personales.

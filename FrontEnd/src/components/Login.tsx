@@ -52,6 +52,13 @@ const Login: FC<LoginProps> = () => {
 
           };
           setUser(usuario);
+
+          
+          // Guardar en localStorage
+          localStorage.setItem('usuario', JSON.stringify(usuario));
+          console.log('Usuario guardado en localStorage:', usuario);
+          // Redirigir a la página principal
+
           navigate('/Main');
         }
         else {

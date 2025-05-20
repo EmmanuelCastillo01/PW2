@@ -20,6 +20,10 @@ export default function Main() {
     
     logout();
     
+    // Limpiar el localStorage
+    localStorage.removeItem('usuario');
+    console.log('Usuario eliminado de localStorage');
+    // Redirigir a la página de inicio
     navigate('/');
   };
 
@@ -29,10 +33,10 @@ export default function Main() {
   }
 
   //Con esto llamamos a la funcion para obtener las peliculas al cargar el componente
-  useEffect(() => {
-    cargarPeliculas();
+ // useEffect(() => {
+   // cargarPeliculas();
     
-  }, []);
+  //}, []); // Traer las peliculas despues cuando las tenga que traer de la API
 
 
 
@@ -85,11 +89,10 @@ export default function Main() {
                 >
                 Inicio
                 </button>
-                <button className="text-left hover:underline">Categorías</button>
                 <button
                   className="text-left hover:underline"
                   onClick={()=> navigate('/perfil')}
-                >Mi Lista
+                >Mi Perfil
                 </button>
                 {user?.tipo_usuario === 'empleado' && (
                   <button className="text-left hover:underline">Agregar Pelicula</button>)}

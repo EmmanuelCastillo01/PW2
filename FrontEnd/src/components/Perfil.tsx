@@ -3,7 +3,7 @@ import { useUserStore } from '../globaStorage';
 import { useNavigate } from 'react-router-dom';
 import PeliculaCard from './PeliculaCard';
 
-export default function MiLista() {
+export default function Perfil() {
   const { user, logout } = useUserStore();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
@@ -12,6 +12,10 @@ export default function MiLista() {
 
   const handleLogout = () => {
     logout();
+
+        // Limpiar el localStorage
+    localStorage.removeItem('usuario');
+    console.log('Usuario eliminado de localStorage');
     navigate('/');
   };
 
@@ -64,8 +68,7 @@ export default function MiLista() {
               <h2 className="text-3xl font-bold mb-6">Menú</h2>
               <nav className="flex flex-col gap-4">
                 <button className="text-left hover:underline" onClick={() => navigate('/Main')}>Inicio</button>
-                <button className="text-left hover:underline">Categorías</button>
-                <button className="text-left hover:underline" onClick={() => navigate('/MiLista')}>Mi Lista</button>
+                <button className="text-left hover:underline" onClick={() => navigate('/perfil')}>Mi Perfil</button>
                 {user?.tipo_usuario === 'empleado' && (
                   <button className="text-left hover:underline">Agregar Película</button>
                 )}

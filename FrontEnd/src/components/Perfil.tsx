@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import { useUserStore } from '../globaStorage';
 import { useNavigate } from 'react-router-dom';
 import PeliculaCard from './PeliculaCard';
+import EditarPerfilModal from './EditarPerfilModal'; // Importa el modal
 
 export default function Perfil() {
   const { user, logout } = useUserStore();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+
+  // Dentro del componente Perfil
+  const [modalAbierto, setModalAbierto] = useState(false);
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
@@ -70,7 +74,7 @@ export default function Perfil() {
                 <button className="text-left hover:underline" onClick={() => navigate('/Main')}>Inicio</button>
                 <button className="text-left hover:underline" onClick={() => navigate('/perfil')}>Mi Perfil</button>
                 {user?.tipo_usuario === 'empleado' && (
-                  <button className="text-left hover:underline">Agregar Película</button>
+                  <button className="text-left hover:underline"  onClick={()=> navigate('/AdminPeliculas')}>Agregar Película</button>
                 )}
                 <button className="text-left hover:underline" onClick={handleLogout}>Cerrar Sesión</button>
               </nav>
@@ -88,7 +92,10 @@ export default function Perfil() {
               <p><span className="font-semibold">🧾 Nombre de usuario:</span> {user.nombre_usuario}</p>
               <p><span className="font-semibold">📧 Correo:</span> {user.correo_electronico}</p>
             </div>
-            <button className="mt-6 px-6 py-2 bg-black text-white rounded-full hover:bg-gray-900 transition">
+            <button
+              className="mt-6 px-6 py-2 bg-black text-white rounded-full hover:bg-gray-900 transition"
+              onClick={() => setModalAbierto(true)}
+            >
               ✏️ Editar información
             </button>
           </section>
@@ -132,6 +139,14 @@ export default function Perfil() {
           </section>
         </main>
       </div>
+            <EditarPerfilModal
+        isOpen={modalAbierto}
+        onClose={() => setModalAbierto(false)}
+        nombreCompleto={user.nombre_completo}
+        nombreUsuario={user.nombre_usuario}
+        onSave={() => {}} // Por ahora no necesitas funcionalidad
+      />
+
     </div>
   );
 }

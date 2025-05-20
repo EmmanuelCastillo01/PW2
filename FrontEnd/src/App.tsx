@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Main from './components/Main';
 import Login from './components/Login';
 import Perfil from './components/Perfil';
+import AdminPeliculas from './components/AdminPeliculas'; // <-- Importa la nueva vista
 import { useUserStore } from './globaStorage';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -35,6 +36,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Perfil />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/AdminPeliculas"
+          element={
+            <ProtectedRoute>
+              <AdminPeliculas />
             </ProtectedRoute>
           }
         />

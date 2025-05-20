@@ -95,7 +95,7 @@ export default function Main() {
                 >Mi Perfil
                 </button>
                 {user?.tipo_usuario === 'empleado' && (
-                  <button className="text-left hover:underline">Agregar Pelicula</button>)}
+                  <button className="text-left hover:underline" onClick={()=> navigate('/AdminPeliculas')}>Agregar Pelicula</button>)}
                 <button className="text-left hover:underline" onClick={handleLogout}>Cerrar Sesion</button>
               </nav>
             </div>

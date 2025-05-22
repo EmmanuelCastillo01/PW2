@@ -10,15 +10,22 @@ exports.getComentarios = async (req, res) => {
     }
 };
 
-// Obtener comentarios por película.
+// Obtener comentarios por película ID.
+// controller/comentario.js
 exports.getComentariosPorPelicula = async (req, res) => {
-    try {
-        const comentarios = await Comentario.find({ pelicula: req.params.id }).populate("usuario", "nombre_usuario");
-        res.status(200).json({ success: true, count: comentarios.length, data: comentarios });
-    } catch (error) {
-        res.status(500).json({ success: false, message: "Error al obtener comentarios", error });
-    }
+  try {
+    /*  👇  usa el nombre REAL del campo  */
+    const comentarios = await Comentario
+      .find({ pelicula_id: req.params.id })   // ← era { pelicula: ... }
+      .sort({ fecha: -1 })                    // más recientes primero
+      .populate('usuario_id', 'nombre_usuario');
+
+    res.status(200).json({ success: true, count: comentarios.length, data: comentarios });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error al obtener comentarios', error });
+  }
 };
+
 
 // Crear un comentario
 exports.createComentario = async (req, res) => {

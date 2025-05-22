@@ -15,7 +15,7 @@ router.route('/comentarios')
   .get(getComentarios)  // Obtener todos los comentarios
   .post(createComentario);  // Crear un nuevo comentario
 
-router.route('/comentarioS/pelicula/:id')
+router.route('/comentarios/pelicula/:id')
   .get(getComentariosPorPelicula);  // Obtener comentarios de una película específica
 
 router.route('/comentarios/:id')

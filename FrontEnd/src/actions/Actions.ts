@@ -1,6 +1,6 @@
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { createUser, ObtenerPeliculas, ValidateUser,  updateUser, createPelicula,fetchPeliculas, updatePelicula, deletePelicula } from '../services/userServices';
-
+import { fetchComentarios, createComentario } from '../services/commentServices';
 export function useCreateUser() {
 
   return useMutation<any, Error, Usuario>({
@@ -81,5 +81,17 @@ export function useUpdatePelicula() {
 export function useDeletePelicula() {
   return useMutation<ApiResponse, Error, string>({
     mutationFn: deletePelicula,
+  });
+}
+
+export function useComentarios() {
+  return useMutation<ApiResponse, Error, string>({
+    mutationFn: fetchComentarios,
+  });
+}
+
+export function useCreateComentario() {
+  return useMutation<ApiResponse, Error, { pelicula_id: string; usuario_id: string; nombre_usuario: string; comentario: string; calificacion: number }>({
+    mutationFn: createComentario,
   });
 }

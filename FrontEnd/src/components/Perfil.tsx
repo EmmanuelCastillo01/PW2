@@ -65,7 +65,7 @@ const handleSave = (dataUpdate: {
       id: 1,
       titulo: 'Inception',
       comentario: 'Una obra maestra visual y narrativa.',
-      imagen: 'https://image.tmdb.org/t/p/w500/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg',
+      imagen: 'https://hips.hearstapps.com/es.h-cdn.co/fotoes/images/media/imagenes/peliculas/super-8/super-814/4619982-1-esl-ES/Super-814.jpg',
       sinopsis: 'Un ladrón que roba secretos mediante el uso de la tecnología de sueños.',
       calificacion_promedio: 4.5,
     },
@@ -83,7 +83,7 @@ const handleSave = (dataUpdate: {
     navigate('/');
     return null;
   }
-  
+
   return (
     <div className="flex flex-col min-h-screen text-gray-800">
       {/* Header */}

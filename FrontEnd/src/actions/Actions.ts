@@ -1,5 +1,5 @@
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
-import { createUser, ObtenerPeliculas, ValidateUser,  updateUser } from '../services/userServices';
+import { createUser, ObtenerPeliculas, ValidateUser,  updateUser, createPelicula } from '../services/userServices';
 
 export function useCreateUser() {
 
@@ -57,3 +57,12 @@ export function useUpdateUser() {
     },
   });
 }
+
+
+
+export function useCreatePelicula() {
+  return useMutation<ApiResponse, Error, { titulo: string; sinopsis: string; imagen: string }>({
+    mutationFn: createPelicula,
+  });
+}
+

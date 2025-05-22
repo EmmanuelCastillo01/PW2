@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useUserStore } from '../globaStorage';
 import { useNavigate } from 'react-router-dom';
+import { useCreatePelicula } from '../actions/Actions';
+import PeliculaCard from './PeliculaCard';          // ya lo tienes
+import { Pelicula } from '../types';
+
 
 export default function AdminPeliculas() {
   const { user, logout } = useUserStore();
@@ -15,6 +19,12 @@ export default function AdminPeliculas() {
     localStorage.removeItem('usuario');
     navigate('/');
   };
+
+    const [titulo, setTitulo]       = useState('');
+    const [sinopsis, setSinopsis]   = useState('');
+    const [imagen, setImagen]       = useState('');
+
+    const { mutate: guardarPelicula, isPending } = useCreatePelicula();
 
   if (!user) {
     navigate('/');
@@ -83,38 +93,90 @@ export default function AdminPeliculas() {
             {/* Sección: Agregar Película */}
             {seccionActiva === 'agregar' && (
               <div className="space-y-4">
+                {/* Título */}
                 <div>
                   <label className="block font-medium mb-1">🎞️ Título de la película</label>
                   <input
+                    value={titulo}
+                    onChange={(e) => setTitulo(e.target.value)}
                     type="text"
                     placeholder="Ej. El origen"
                     className="w-full p-2 border border-gray-300 rounded"
+                    required
                   />
                 </div>
 
+                {/* Sinopsis */}
                 <div>
                   <label className="block font-medium mb-1">📝 Sinopsis</label>
                   <textarea
-                    placeholder="Breve descripción de la película..."
+                    value={sinopsis}
+                    onChange={(e) => setSinopsis(e.target.value)}
+                    placeholder="Breve descripción..."
                     className="w-full p-2 border border-gray-300 rounded"
                     rows={4}
+                    required
                   />
                 </div>
 
+                {/* URL imagen */}
                 <div>
                   <label className="block font-medium mb-1">🖼️ URL de la imagen</label>
                   <input
+                    value={imagen}
+                    onChange={(e) => setImagen(e.target.value)}
                     type="text"
                     placeholder="https://..."
                     className="w-full p-2 border border-gray-300 rounded"
+                    required
                   />
                 </div>
 
-                <button className="mt-4 px-6 py-2 bg-black text-white rounded hover:bg-gray-800 transition">
-                  Guardar Película
+                {/* ----- Pre-visualización ----- */}
+                {titulo && imagen && (
+                  <div className="mt-6">
+                    <h3 className="text-lg font-semibold mb-2">Pre-visualización</h3>
+                    <PeliculaCard
+                      data={{
+                        _id: 'preview',
+                        titulo,
+                        sinopsis,
+                        imagen,
+                        calificacion_promedio: 0,
+                      } as Pelicula}
+                      heightClass="h-56"
+                    />
+                  </div>
+                )}
+
+                {/* Botón Guardar */}
+                <button
+                  disabled={isPending}
+                  onClick={() =>
+                    guardarPelicula(
+                      { titulo, sinopsis, imagen },
+                      {
+                        onSuccess: (resp) => {
+                          if (resp.success) {
+                            alert('Película guardada ✅');
+                            setTitulo('');
+                            setSinopsis('');
+                            setImagen('');
+                          } else {
+                            alert(resp.message);
+                          }
+                        },
+                        onError: () => alert('Error al guardar película'),
+                      }
+                    )
+                  }
+                  className="mt-4 px-6 py-2 bg-black text-white rounded hover:bg-gray-800 transition disabled:opacity-50"
+                >
+                  {isPending ? 'Guardando...' : 'Guardar Película'}
                 </button>
               </div>
             )}
+
 
             {/* Sección: Eliminar / Actualizar Película */}
             {seccionActiva === 'gestionar' && (

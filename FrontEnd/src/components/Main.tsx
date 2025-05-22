@@ -37,6 +37,52 @@ export default function Main() {
    // cargarPeliculas();
     
   //}, []); // Traer las peliculas despues cuando las tenga que traer de la API
+/* Películas DEMO mientras llega la API */
+const peliculasDemo: Pelicula[] = [
+  {
+    _id: 'd1',
+    titulo: 'Dune',
+    sinopsis: '',
+    imagen: 'https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg',
+    calificacion_promedio: 4.2,
+  },
+  {
+    _id: 'd2',
+    titulo: 'Oppenheimer',
+    sinopsis: '',
+    imagen: 'https://www.inputmag.dk/wp-content/uploads/2024/03/Oppenheimer.webp',
+    calificacion_promedio: 4.6,
+  },
+  {
+    _id: 'd3',
+    titulo: 'Spider-Verse',
+    sinopsis: '',
+    imagen: 'https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg',
+    calificacion_promedio: 4.8,
+  },
+  {
+    _id: 'd4',
+    titulo: 'Wonka',
+    sinopsis: '',
+    imagen: 'https://image.tmdb.org/t/p/w500/qhb1qOilapbapxWQn9jtRCMwXJF.jpg',
+    calificacion_promedio: 4.1,
+  },
+  {
+    _id: 'd5',
+    titulo: 'Godzilla Minus One',
+    sinopsis: '',
+    imagen: 'https://sm.ign.com/ign_latam/screenshot/default/godzilla-minus-one-3200638-1_ewkn.jpg',
+    calificacion_promedio: 4.4,
+  },
+  {
+    _id: 'd6',
+    titulo: 'Napoleon',
+    sinopsis: '',
+    imagen: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOZIU2VqTCjXZffU0cvF3T-kXtEdStdI1ECg&s',
+    calificacion_promedio: 3.9,
+  },
+  
+];
 
 
 
@@ -121,34 +167,28 @@ export default function Main() {
             </section>
 
             {/* Populares */}
-            <section>
-              <h2 className="text-2xl font-semibold mb-2">Populares</h2>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="bg-black text-white h-40 flex items-center justify-center">
-                  Película 4
-                </div>
-                <div className="bg-black text-white h-40 flex items-center justify-center">
-                  Película 5
-                </div>
-                <div className="bg-black text-white h-40 flex items-center justify-center">
-                  Película 6
-                </div>
+           <section>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {peliculasDemo.slice(0, 3).map((p) => (
+                  <PeliculaCard
+                    key={p._id}
+                    data={p}
+                    heightClass={sidebarOpen ? 'h-44' : 'h-56'}
+                  />
+                ))}
               </div>
             </section>
 
             {/* Nuevos lanzamientos */}
             <section>
-              <h2 className="text-2xl font-semibold mb-2">Nuevos lanzamientos</h2>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="bg-black text-white h-40 flex items-center justify-center">
-                  Película 7
-                </div>
-                <div className="bg-black text-white h-40 flex items-center justify-center">
-                  Película 8
-                </div>
-                <div className="bg-black text-white h-40 flex items-center justify-center">
-                  Película 9
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {peliculasDemo.slice(3, 6).map((p) => (
+                  <PeliculaCard
+                    key={p._id}
+                    data={p}
+                    heightClass={sidebarOpen ? 'h-44' : 'h-56'}
+                  />
+                ))}
               </div>
             </section>
           </div>

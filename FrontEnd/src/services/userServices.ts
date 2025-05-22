@@ -45,6 +45,25 @@ export async function updateUser(payload: { id: string; data: Partial<Usuario>;}
   return res.json();
 }
 
+
+
+
+// Crear película
+export async function createPelicula(p: {
+  titulo: string;
+  sinopsis: string;
+  imagen: string;
+}): Promise<ApiResponse> {
+  const res = await fetch('http://localhost:8080/movies/pelicula', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(p),
+  });
+  return res.json();
+}
+
+
+
 /*  createUser, ValidateUser y ObtenerPeliculas permanecen igual  */
 
   /*

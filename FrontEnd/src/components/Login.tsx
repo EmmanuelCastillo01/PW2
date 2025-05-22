@@ -6,6 +6,7 @@ import { ValidateUser } from '../services/userServices';
 import { validarUsuario } from '../actions/Actions';
 import { toast } from 'sonner';
 import { useUserStore } from '../globaStorage';
+import { mapUser } from '../utils/mapUser';
 
 interface LoginProps {
   // Define props si las necesitas
@@ -53,9 +54,11 @@ const Login: FC<LoginProps> = () => {
           };
           setUser(usuario);
 
-          
+          const normalizado = mapUser(usuario);
+            setUser(normalizado);
+            localStorage.setItem('usuario', JSON.stringify(normalizado));
           // Guardar en localStorage
-          localStorage.setItem('usuario', JSON.stringify(usuario));
+        //  localStorage.setItem('usuario', JSON.stringify(usuario));
           console.log('Usuario guardado en localStorage:', usuario);
           // Redirigir a la página principal
 

@@ -64,15 +64,29 @@ exports.createUsuario = async (req, res) => {
 // @access  Público
 exports.updateUsuario = async (req, res) => {
   try {
-    const usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    const permitidos = ['nombre_completo','nombre_usuario','correo_electronico','contraseña'];
+    const updates = {};
+    permitidos.forEach(c => { if (req.body[c] !== undefined) updates[c] = req.body[c]; });
+
+    const usuario = await Usuario.findByIdAndUpdate(
+      req.params.id,
+      { $set: updates },
+      { new: true, runValidators: true, context: 'query' }
+    );
+
     if (!usuario) {
-      return res.status(404).json({ success: false, message: `Usuario con ID ${req.params.id} no encontrado` });
+      return res.status(404).json({ success:false, message:`Usuario con ID ${req.params.id} no encontrado`});
     }
-    res.json({ success: true, message: 'Usuario actualizado correctamente', data: usuario });
+    res.json({ success:true, message:'Usuario actualizado correctamente', data:usuario });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Error al actualizar usuario", error });
+    // Si el correo es duplicado, Mongo lanza code 11000
+    if (error.code === 11000) {
+      return res.status(400).json({ success:false, message:'Correo ya registrado' });
+    }
+    res.status(500).json({ success:false, message:'Error al actualizar usuario', error });
   }
 };
+
 
 // @desc    Eliminar un usuario
 // @route   DELETE /api/v1/usuarios/:id

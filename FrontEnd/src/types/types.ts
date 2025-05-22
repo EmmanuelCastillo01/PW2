@@ -1,5 +1,6 @@
 interface Usuario {
   id?: string;
+  _id?: string;  
   nombre_usuario: string;
   contraseña: string;
   correo_electronico: string;
@@ -8,6 +9,7 @@ interface Usuario {
 }
 
 interface ApiResponse {
+  message: any;
   success: boolean;
   data: any;
 }
@@ -27,3 +29,4 @@ interface Pelicula {
   imagen: string;
   calificacion_promedio: number;
 }
+

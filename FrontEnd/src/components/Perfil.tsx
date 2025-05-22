@@ -3,9 +3,14 @@ import { useUserStore } from '../globaStorage';
 import { useNavigate } from 'react-router-dom';
 import PeliculaCard from './PeliculaCard';
 import EditarPerfilModal from './EditarPerfilModal'; // Importa el modal
+import { useUpdateUser } from '../actions/Actions';
+import { mapUser } from '../utils/mapUser';
+
+ 
 
 export default function Perfil() {
-  const { user, logout } = useUserStore();
+  
+  const { user,setUser,logout } = useUserStore();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
@@ -23,10 +28,36 @@ export default function Perfil() {
     navigate('/');
   };
 
-  if (!user) {
-    navigate('/');
-    return null;
-  }
+
+//handleUpdateUser
+const mutUpdateUser = useUpdateUser();       
+
+const handleSave = (dataUpdate: {
+  nombre_completo: string;
+  nombre_usuario: string;
+  correo_electronico: string;
+  contraseña?: string;
+}) => {
+  if (!user?.id) return;
+
+    mutUpdateUser.mutate(
+      { id: user.id, data: dataUpdate },
+      {
+        onSuccess: (resp) => {
+          if (resp.success) {
+              const normalizado = mapUser(resp.data);   // 👈
+              setUser(normalizado);
+              localStorage.setItem('usuario', JSON.stringify(normalizado));
+              setModalAbierto(false);
+
+          } else {
+            alert(resp.message);
+          }
+        },
+        onError: () => alert('Error al actualizar perfil'),
+      }
+    );
+  };
 
   // Películas simuladas 
   const peliculasDummy = [
@@ -48,6 +79,11 @@ export default function Perfil() {
     },
   ];
 
+  if (!user) {
+    navigate('/');
+    return null;
+  }
+  
   return (
     <div className="flex flex-col min-h-screen text-gray-800">
       {/* Header */}
@@ -93,11 +129,12 @@ export default function Perfil() {
               <p><span className="font-semibold">📧 Correo:</span> {user.correo_electronico}</p>
             </div>
             <button
-              className="mt-6 px-6 py-2 bg-black text-white rounded-full hover:bg-gray-900 transition"
-              onClick={() => setModalAbierto(true)}
-            >
-              ✏️ Editar información
-            </button>
+          className="mt-6 px-6 py-2 bg-black text-white rounded-full hover:bg-gray-900"
+          onClick={() => setModalAbierto(true)}
+        >
+          ✏️ Editar información
+        </button>
+
           </section>
 
           {/* Lista de Reseñas */}
@@ -139,13 +176,15 @@ export default function Perfil() {
           </section>
         </main>
       </div>
-            <EditarPerfilModal
+              <EditarPerfilModal
         isOpen={modalAbierto}
         onClose={() => setModalAbierto(false)}
-        nombreCompleto={user.nombre_completo}
-        nombreUsuario={user.nombre_usuario}
-        onSave={() => {}} // Por ahora no necesitas funcionalidad
+        onSave={handleSave}
+        nombreCompletoInicial={user.nombre_completo}
+        nombreUsuarioInicial={user.nombre_usuario}
+        correoInicial={user.correo_electronico}
       />
+
 
     </div>
   );

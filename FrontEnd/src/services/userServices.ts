@@ -29,6 +29,24 @@
     return response.json();
   }
 
+
+
+
+/** PATCH – actualiza solo los campos enviados */
+export async function updateUser(payload: { id: string; data: Partial<Usuario>;}): Promise<ApiResponse> {
+  const { id, data } = payload;
+
+  const res = await fetch(`http://localhost:8080/users/usuario/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+  return res.json();
+}
+
+/*  createUser, ValidateUser y ObtenerPeliculas permanecen igual  */
+
   /*
   export async function fetchUsers(): Promise<any[]> {
     const response = await fetch('http://localhost:3000/api/users');

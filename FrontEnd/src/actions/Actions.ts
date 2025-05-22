@@ -1,5 +1,5 @@
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
-import { createUser, ObtenerPeliculas, ValidateUser } from '../services/userServices';
+import { createUser, ObtenerPeliculas, ValidateUser,  updateUser } from '../services/userServices';
 
 export function useCreateUser() {
 
@@ -40,6 +40,20 @@ export function useObtenerPeliculas() {
     },
     onError: (error) => {
       console.error('Error al obtener películas:', error.message);
+    },
+  });
+}
+
+/* ---------- Update perfil ---------- */
+/* ---------- Update perfil ---------- */
+export function useUpdateUser() {
+  return useMutation<ApiResponse, Error, { id: string; data: Partial<Usuario> }>({
+    mutationFn: updateUser,
+    onSuccess: () => {
+      /* si quieres lógica global ponla aquí */
+    },
+    onError: (error) => {
+      console.error('Error al actualizar usuario', error);
     },
   });
 }

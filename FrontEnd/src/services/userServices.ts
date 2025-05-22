@@ -62,6 +62,33 @@ export async function createPelicula(p: {
   return res.json();
 }
 
+// Obtener todas
+export async function fetchPeliculas(): Promise<ApiResponse> {
+  const res = await fetch('http://localhost:8080/movies/pelicula');
+  return res.json();
+}
+
+// Actualizar
+export async function updatePelicula(payload: {
+  id: string;
+  data: Partial<Pelicula>;
+}): Promise<ApiResponse> {
+  const { id, data } = payload;
+  const res = await fetch(`http://localhost:8080/movies/pelicula/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+// Eliminar
+export async function deletePelicula(id: string): Promise<ApiResponse> {
+  const res = await fetch(`http://localhost:8080/movies/pelicula/${id}`, {
+    method: 'DELETE',
+  });
+  return res.json();
+}
 
 
 /*  createUser, ValidateUser y ObtenerPeliculas permanecen igual  */

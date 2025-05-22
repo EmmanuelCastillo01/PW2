@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUserStore } from '../globaStorage';
 import { useNavigate } from 'react-router-dom';
-import { useCreatePelicula } from '../actions/Actions';
+import { useCreatePelicula, useListPeliculas, useUpdatePelicula, useDeletePelicula,} from '../actions/Actions';
 import PeliculaCard from './PeliculaCard';          // ya lo tienes
 import { Pelicula } from '../types';
 
@@ -11,8 +11,94 @@ export default function AdminPeliculas() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [seccionActiva, setSeccionActiva] = useState<'agregar' | 'gestionar'>('agregar');
+const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+const resetFormulario = () => {
+  setTitulo('');
+  setSinopsis('');
+  setImagen('');
+  setSeleccionada(null);
+};
+
+
+  /* carga lista al cambiar a la sección gestionar */
+useEffect(() => {
+  /* Siempre limpia los campos cuando se cambia de sección */
+  resetFormulario();
+
+  /* Si entras en Gestionar, carga la lista */
+  if (seccionActiva === 'gestionar') {
+    cargarLista(undefined, {
+      onSuccess: (r) => r.success && setPeliculas(r.data),
+    });
+  }
+}, [seccionActiva]);
+
+
+
+const handleSelect = (id: string) => {
+  const p = peliculas.find((x) => x._id === id) || null;
+  setSeleccionada(p);
+  if (p) {
+    setTitulo(p.titulo);
+    setSinopsis(p.sinopsis);
+    setImagen(p.imagen);
+  }
+};
+
+const handleActualizar = () => {
+  if (!seleccionada?._id) return;
+
+  actualizarPelicula(
+    { id: seleccionada._id, data: { titulo, sinopsis, imagen } },
+    {
+      onSuccess: (r) => {
+        if (r.success) {
+          alert('Actualizada ✅');
+
+          /* 1️⃣ actualiza la lista local */
+          setPeliculas((prev) =>
+            prev.map((p) => (p._id === seleccionada._id ? r.data : p))
+          );
+
+          /* 2️⃣ limpia campos y selección */
+          resetFormulario();
+
+          /* 3️⃣ recarga lista del backend (opcional) */
+          cargarLista();
+        }
+      },
+    }
+  );
+};
+
+
+const handleEliminar = () => {
+  if (!seleccionada?._id) return;
+  if (!confirm('¿Seguro?')) return;
+
+  eliminarPelicula(seleccionada._id, {
+    onSuccess: (r) => {
+      if (r.success) {
+        alert('Eliminada ✅');
+
+        /* 1️⃣ quita de la lista local */
+        setPeliculas((prev) => prev.filter((p) => p._id !== seleccionada._id));
+
+        /* 2️⃣ limpia campos y selección */
+        resetFormulario();
+
+        /* 3️⃣ (opcional) recarga lista del backend */
+        cargarLista();
+      }
+    },
+  });
+};
+
+
+const handleCancelar = () => resetFormulario();
+  /* ---- cerrar sesión ---- */
+
 
   const handleLogout = () => {
     logout();
@@ -25,6 +111,12 @@ export default function AdminPeliculas() {
     const [imagen, setImagen]       = useState('');
 
     const { mutate: guardarPelicula, isPending } = useCreatePelicula();
+    const [peliculas, setPeliculas]   = useState<Pelicula[]>([]);
+    const [seleccionada, setSeleccionada] = useState<Pelicula | null>(null);
+    /* ---- gestionar ---- */
+    const { mutate: cargarLista, data: listaResp } = useListPeliculas();
+    const { mutate: actualizarPelicula, isPending: updPend } = useUpdatePelicula();
+    const { mutate: eliminarPelicula,  isPending: delPend } = useDeletePelicula();
 
   if (!user) {
     navigate('/');
@@ -179,12 +271,108 @@ export default function AdminPeliculas() {
 
 
             {/* Sección: Eliminar / Actualizar Película */}
-            {seccionActiva === 'gestionar' && (
-              <div className="text-center text-gray-600">
-                <p>🔧 Aquí podrás eliminar o actualizar películas existentes.</p>
-                <p className="mt-2 italic">Esta sección aún no tiene funcionalidad implementada.</p>
-              </div>
-            )}
+            {/* Sección: Eliminar / Actualizar Película */}
+{seccionActiva === 'gestionar' && (
+  <>
+    {/* Dropdown */}
+    <div className="mb-4">
+      <label className="block font-medium mb-1">🎬 Selecciona una película</label>
+      <select
+        className="w-full p-2 border rounded"
+        defaultValue=""
+        onChange={(e) => handleSelect(e.target.value)}
+      >
+        <option value="" disabled>
+          -- Elegir --
+        </option>
+        {peliculas.map((p) => (
+          <option key={p._id} value={p._id}>
+            {p.titulo}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    {/* Si hay una seleccionada, muestra formulario y pre-visualización */}
+    {seleccionada && (
+      <div className="space-y-4">
+        {/* Título */}
+        <div>
+          <label className="block font-medium mb-1">🎞️ Título</label>
+          <input
+            value={titulo}
+            onChange={(e) => setTitulo(e.target.value)}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+
+        {/* Sinopsis */}
+        <div>
+          <label className="block font-medium mb-1">📝 Sinopsis</label>
+          <textarea
+            value={sinopsis}
+            onChange={(e) => setSinopsis(e.target.value)}
+            className="w-full p-2 border rounded"
+            rows={4}
+          />
+        </div>
+
+        {/* Imagen */}
+        <div>
+          <label className="block font-medium mb-1">🖼️ URL imagen</label>
+          <input
+            value={imagen}
+            onChange={(e) => setImagen(e.target.value)}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+
+        {/* Pre-visualización */}
+        <div className="mt-4">
+          <PeliculaCard
+            data={{
+              _id: 'prev',
+              titulo,
+              sinopsis,
+              imagen,
+              calificacion_promedio: seleccionada.calificacion_promedio,
+            }}
+            heightClass="h-56"
+          />
+        </div>
+
+        {/* Botones */}
+        <div className="flex gap-4 mt-4">
+          <button
+            disabled={updPend}
+            onClick={handleActualizar}
+            className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+          >
+            Actualizar
+          </button>
+          <button
+            disabled={delPend}
+            onClick={handleEliminar}
+            className="flex-1 bg-red-600 text-white py-2 rounded hover:bg-red-700 disabled:opacity-50"
+          >
+            Eliminar
+          </button>
+          <button
+            onClick={handleCancelar}
+            className="flex-1 bg-gray-300 py-2 rounded hover:bg-gray-400"
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    )}
+
+    {!seleccionada && (
+      <p className="text-gray-600 italic">Selecciona una película para editarla o eliminarla.</p>
+    )}
+  </>
+)}
+
           </div>
         </main>
       </div>

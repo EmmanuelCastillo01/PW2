@@ -1,5 +1,5 @@
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
-import { createUser, ObtenerPeliculas, ValidateUser,  updateUser, createPelicula } from '../services/userServices';
+import { createUser, ObtenerPeliculas, ValidateUser,  updateUser, createPelicula,fetchPeliculas, updatePelicula, deletePelicula } from '../services/userServices';
 
 export function useCreateUser() {
 
@@ -66,3 +66,20 @@ export function useCreatePelicula() {
   });
 }
 
+export function useListPeliculas() {
+  return useMutation<ApiResponse, Error, void>({
+    mutationFn: fetchPeliculas,
+  });
+}
+
+export function useUpdatePelicula() {
+  return useMutation<ApiResponse, Error, { id: string; data: Partial<Pelicula> }>({
+    mutationFn: updatePelicula,
+  });
+}
+
+export function useDeletePelicula() {
+  return useMutation<ApiResponse, Error, string>({
+    mutationFn: deletePelicula,
+  });
+}

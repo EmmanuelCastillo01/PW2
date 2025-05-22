@@ -17,3 +17,9 @@ export async function createComentario(body: {
   });
   return res.json();
 }
+
+
+export async function fetchComentariosUsuario(usuarioId: string): Promise<ApiResponse> {
+  const res = await fetch(`http://localhost:8080/comments/comentarios/usuario/${usuarioId}`);
+  return res.json();
+}

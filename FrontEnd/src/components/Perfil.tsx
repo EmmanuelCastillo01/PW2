@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUserStore } from '../globaStorage';
 import { useNavigate } from 'react-router-dom';
 import PeliculaCard from './PeliculaCard';
 import EditarPerfilModal from './EditarPerfilModal'; // Importa el modal
-import { useUpdateUser } from '../actions/Actions';
+import { useUpdateUser,useComentariosUsuario } from '../actions/Actions';
 import { mapUser } from '../utils/mapUser';
 
  
@@ -28,7 +28,10 @@ export default function Perfil() {
     navigate('/');
   };
 
+/* …dentro del componente Perfil()… */
 
+const { mutate: cargarMisComentarios, data: respMisCom } = useComentariosUsuario();
+const [pelisComentadas, setPelisComentadas] = useState<Pelicula[]>([]);
 //handleUpdateUser
 const mutUpdateUser = useUpdateUser();       
 
@@ -59,25 +62,28 @@ const handleSave = (dataUpdate: {
     );
   };
 
-  // Películas simuladas 
-  const peliculasDummy = [
-    {
-      id: 1,
-      titulo: 'Inception',
-      comentario: 'Una obra maestra visual y narrativa.',
-      imagen: 'https://hips.hearstapps.com/es.h-cdn.co/fotoes/images/media/imagenes/peliculas/super-8/super-814/4619982-1-esl-ES/Super-814.jpg',
-      sinopsis: 'Un ladrón que roba secretos mediante el uso de la tecnología de sueños.',
-      calificacion_promedio: 4.5,
-    },
-    {
-      id: 2,
-      titulo: 'Interstellar',
-      comentario: 'Una odisea emocional a través del espacio.',
-      imagen: 'https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg',
-      sinopsis: 'Un grupo de astronautas viaja a través de un agujero de gusano.',
-      calificacion_promedio: 4.7,
-    },
-  ];
+
+
+
+/* al montar: */
+useEffect(() => {
+  if (user?.id) {
+    cargarMisComentarios(user.id, {
+      onSuccess: (r) => {
+        if (r.success) {
+          const unicas: Record<string, Pelicula> = {};
+          r.data.forEach((c: any) => {
+            const p = c.pelicula_id;
+            if (p && !unicas[p._id]) unicas[p._id] = p;
+          });
+          setPelisComentadas(Object.values(unicas));
+        }
+      },
+    });
+  }
+}, [user?.id]);   // <-- dependencia cambiada
+
+
 
   if (!user) {
     navigate('/');
@@ -139,41 +145,25 @@ const handleSave = (dataUpdate: {
 
           {/* Lista de Reseñas */}
           <section className="max-w-6xl mx-auto">
-            <h2 className="text-2xl font-bold mb-4">📝 Mis Reseñas</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {peliculasDummy.map((pelicula) => (
-                <PeliculaCard
-                  key={pelicula.id}
-                  data={{
-                    _id: pelicula.id.toString(),
-                    titulo: pelicula.titulo,
-                    sinopsis: pelicula.sinopsis,
-                    imagen: pelicula.imagen,
-                    calificacion_promedio: pelicula.calificacion_promedio,
-                  }}
-                />
-              ))}
-            </div>
-          </section>
+              <h2 className="text-2xl font-bold mb-4">💬 Películas que he comentado</h2>
 
-          {/* Películas Favoritas */}
-          <section className="max-w-6xl mx-auto">
-            <h2 className="text-2xl font-bold mb-4">❤️ Películas Favoritas</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {peliculasDummy.map((pelicula) => (
-                <PeliculaCard
-                  key={`fav-${pelicula.id}`}
-                  data={{
-                    _id: pelicula.id.toString(),
-                    titulo: pelicula.titulo,
-                    sinopsis: pelicula.sinopsis,
-                    imagen: pelicula.imagen,
-                    calificacion_promedio: pelicula.calificacion_promedio,
-                  }}
-                />
-              ))}
-            </div>
-          </section>
+              {pelisComentadas.length === 0 && (
+                <p className="italic text-gray-600">Aún no has comentado ninguna película.</p>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {pelisComentadas.map((p) => (
+                  <div key={p._id} onClick={() => navigate(`/pelicula/${p._id}`)} className="cursor-pointer">
+                    <PeliculaCard
+                      data={p}
+                      heightClass={sidebarOpen ? 'h-44' : 'h-56'}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+
+          
         </main>
       </div>
               <EditarPerfilModal

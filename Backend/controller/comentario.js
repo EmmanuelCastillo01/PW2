@@ -26,6 +26,20 @@ exports.getComentariosPorPelicula = async (req, res) => {
   }
 };
 
+// NUEVO: comentarios del usuario logueado
+exports.getComentariosPorUsuario = async (req, res) => {
+  try {
+    const comentarios = await Comentario
+      .find({ usuario_id: req.params.id })
+      .populate('pelicula_id')            // trae la película completa
+      .sort({ fecha: -1 });
+
+    res.status(200).json({ success: true, count: comentarios.length, data: comentarios });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error al obtener comentarios', error });
+  }
+};
+
 
 // Crear un comentario
 exports.createComentario = async (req, res) => {

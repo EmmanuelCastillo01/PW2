@@ -1,26 +1,28 @@
-const mongoose = require("mongoose");
+// model/pelicula.js
+const mongoose = require('mongoose');
 
-const peliculaSchema = new mongoose.Schema({
+const peliculaSchema = new mongoose.Schema(
+  {
     titulo: {
-        type: String,
-        required: [true, "Debe ingresar un título para la película"]
+      type: String,
+      required: [true, 'Debe ingresar un título para la película'],
     },
     sinopsis: {
-        type: String,
-        required: [true, "Debe ingresar una sinopsis"]
+      type: String,
+      required: [true, 'Debe ingresar una sinopsis'],
     },
     imagen: {
-        type: String, // URL o ruta de la imagen
-        required: [true, "Debe agregar una imagen"]
+      type: String,
+      required: [true, 'Debe agregar una imagen'],
     },
     calificacion_promedio: {
-        type: Number,
-        default: 0, 
-        min: 0,
-        max: 5
-    }
-});
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 5,
+    },
+  },
+  { timestamps: true }          // 👈  createdAt y updatedAt automáticos
+);
 
-const Pelicula = mongoose.model("Pelicula", peliculaSchema);
-
-module.exports = Pelicula;
+module.exports = mongoose.model('Pelicula', peliculaSchema);

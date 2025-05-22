@@ -124,13 +124,12 @@ export default function Main() {
               key={idx}
               className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6"
             >
-              {fila.map((p) => (
-                <PeliculaCard
-                  key={p._id}
-                  data={p}
-                  heightClass={sidebarOpen ? 'h-44' : 'h-56'}
-                />
-              ))}
+                          {fila.map((p) => (
+              <div key={p._id} onClick={() => navigate(`/pelicula/${p._id}`)} className="cursor-pointer">
+                <PeliculaCard data={p} heightClass={sidebarOpen ? 'h-44' : 'h-56'} />
+              </div>
+            ))}
+
             </div>
           ))}
         </main>

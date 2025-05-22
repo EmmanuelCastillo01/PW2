@@ -8,6 +8,7 @@ import AdminPeliculas from './components/AdminPeliculas'; // <-- Importa la nuev
 import { useUserStore } from './globaStorage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { mapUser } from './utils/mapUser';
+import DetallePelicula from './components/DetallePelicula';
 
 function App() {
   const { setUser } = useUserStore();
@@ -44,6 +45,14 @@ function App() {
           element={
             <ProtectedRoute>
               <AdminPeliculas />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pelicula/:id"
+          element={
+            <ProtectedRoute>
+              <DetallePelicula />      
             </ProtectedRoute>
           }
         />
